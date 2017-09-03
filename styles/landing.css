@@ -56,4 +56,10 @@ body.landing {
 .ion-iphone {
     color: rgb(233, 50, 117);
     font-size: 5rem;
+    transition: all 1s ease-out;
+}
+
+.ion-music-note:hover, .ion-radio-waves:hover, .ion-iphone:hover,
+.ion-music-note:focus, .ion-radio-waves:focus, .ion-iphone:focus {
+    color: #dea924;
 }
