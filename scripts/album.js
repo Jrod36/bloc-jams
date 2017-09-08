@@ -4,7 +4,7 @@ var albumPicasso = {
     artist: 'Pablo Picasso',
     label: 'Cubism',
     year: '1881',
-    albumArtUrl: 'assets/images/album-covers/01.png',
+    albumArtUrl: 'assets/images/album_covers/01.png',
     songs: [
         { title: 'Blue', duration: '4:26' },
         { title: 'Green', duration: '3:14' },
@@ -14,7 +14,7 @@ var albumPicasso = {
     ]
 };
 
-// example album 
+// example album
 var albumMarconi = {
     title: 'The Telephone',
     artist: 'Gulieolmo Marconi',
@@ -30,6 +30,22 @@ var albumMarconi = {
     ]
 };
 
+var albumJack = {
+    title: 'Sleep Through the Static',
+    artist: 'Jack Johnson',
+    label: 'Rock',
+    year: '2008',
+    albumArtUrl: 'assets/images/album_covers/17.png',
+    songs: [
+        { title: 'All At Once', duration: '3.38' },
+        { title: 'Sleep Through the Static', duration: '3:43' },
+        { title: 'Hope', duration: '3:42' },
+        { title: 'Angel', duration: '2:03' },
+        { title: 'If I Had Eyes', duration: '3.59' },
+        { title: 'Adrift', duration: '3.53' },
+    ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
       '<tr class="album-view-song-item">'
@@ -42,41 +58,24 @@ var createSongRow = function(songNumber, songName, songLength) {
     return template;
 };
 
-var setCurrentAlbum = function(album) {
-    /* #1 - we select all of the HTML elements required to display on the
-    album page: title, artist, release info, image, and song list. We want to
-    populate these elements with information. To do so, we assign the
-    corresponding values of the album objects' properties the HTML elements. */
-    var albumTitle = document.getElementsByClassName('album-view-title')[0];
-    var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-    var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-    var albumImage = document.getElementsByClassName('album-cover-art')[0];
-    var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+// Select elements that we want to populate with text dynamically
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
 
-    /* #2 - the firstChild property identifies the first child node of an
-    element, and nodeValue returns or sets the value of a node. Alternatively
-    we could technically use innerHTML to insert plain text (like we did in
-  collection.js), but it's excessive and semantically misleading in this context
-  because we aren't adding any HTML. For example, the .albumTitle element has
-  only one node and it's a text node. When we use the firstChild property and
-  nodeValue properties together on the .albumTitle element, we set the value
-  of that text node to album.tittle.  */
+var setCurrentAlbum = function(album) {
+    // Assign values to each part of the album (text, images)
     albumTitle.firstChild.nodeValue = album.title;
     albumArtist.firstChild.nodeValue = album.artist;
     albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
     albumImage.setAttribute('src', album.albumArtUrl);
 
-    /* #3 - When we populated the Collection view with albums, we initially
-    set the value of the parent container's innerHTML to an empty string.
-    This ensured that we were working with a clean slate. We do the same
-    here and clear the album song list HTML to make sure there are no
-    interfering elements. */
+    // Clear contents of album song list container
     albumSongList.innerHTML = '';
 
-    /* #4 - We use a for loop to go thru all the songs from the specified
-    album object and insert them into the HTML using the innerHTML proerty.
-    The createSongRow function is called at each loop, passing in the song
-    number, name, and length arguments from our album object.  */
+    // Build list of songs from album JavaScript object
     for (var i = 0; i < album.songs.length; i++) {
         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
     }
@@ -84,4 +83,14 @@ var setCurrentAlbum = function(album) {
 
 window.onload = function() {
     setCurrentAlbum(albumPicasso);
+
+    var albums = [albumPicasso, albumMarconi, albumJack];
+    var index = 1;
+    albumImage.onclick = function() {
+        setCurrentAlbum(albums[index]);
+        index++;
+        if ( index == albums.length) {
+           index = 0;
+        }
+    };
 };
